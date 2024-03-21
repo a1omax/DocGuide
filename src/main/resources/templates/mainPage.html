@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/css/bootstrap-select.css" />
+
+    <title>Create Disease</title>
+</head>
+<body>
+<div th:insert="navbar :: navbar"></div>
+<div class="container">
+
+    <h1 class="mb-4">Receipt Form</h1>
+
+    <div class="row mb-3">
+        <div class="col-sm-6">
+            <label for="patientFirstName" class="form-label">First Name</label>
+            <input id="patientFirstName" class="form-control">
+        </div>
+    </div>
+    <div class="row mb-3">
+
+        <div class="col-sm-6">
+            <label for="patientLastName" class="form-label">Last Name</label>
+            <input id="patientLastName" class="form-control">
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-sm-6">
+            <label for="symptomsSelect" class="form-label">Choose one or more symptoms:</label>
+            <div>
+                <select id="symptomsSelect" data-live-search="true" data-live-search-style="startsWith" class="selectpicker form-select" multiple>
+                    <option th:each="symptom : ${symptomList}" th:value="${symptom.id}" th:text="${symptom.name}"></option>
+                </select>
+                <button onclick="onClickFindDiseasesButton()" class="btn btn-primary mt-4">Find disease</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-sm-6">
+            <label for="diseaseSelect" class="form-label">Choose one disease:</label>
+            <div>
+                <select id="diseaseSelect" data-live-search="true" data-live-search-style="startsWith" class="selectpicker form-select">
+                </select>
+                <button onclick="onClickFindTreatmentProtocols()" class="btn btn-primary mt-4">Find protocol</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-sm-6">
+            <label for="treatmentProtocolSelect" class="form-label">Choose one treatment protocol:</label>
+            <div>
+                <select id="treatmentProtocolSelect" data-live-search="true" data-live-search-style="startsWith" class="selectpicker form-select">
+                </select>
+                <button onclick="onClickFillWithProtocolData()" class="btn btn-primary mt-4">Fill receipt form</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-sm-6">
+            <label for="procedures" class="form-label">Procedures</label>
+            <div>
+                <textarea id="procedures" class="form-control"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-sm-6">
+            <label class="form-label">Drugs</label>
+            <div id="drugBlock">
+            </div>
+        </div>
+    </div>
+    <button onclick="onClickSubmitData()" class="btn btn-primary mt-4">Submit Form</button>
+
+</div>
+
+
+<script src="/scripts/mainPage.js"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/js/bootstrap-select.js"></script>
+
+</body>
+</html>

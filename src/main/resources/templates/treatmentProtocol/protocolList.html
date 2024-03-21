@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+  <title>Treatment Protocols</title>
+</head>
+<body>
+<div th:insert="navbar :: navbar"></div>
+
+<h1>List of Treatment Protocols</h1>
+<a href="/treatment-protocol/create">
+    <button>
+        <h3>Create</h3>
+    </button>
+</a>
+<table class="table">
+    <thead class="thead-dark">
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Disease</th>
+        <th>Active substance</th>
+        <th>Procedures</th>
+    </tr>
+    </thead>
+    <tbody>
+
+    <tr th:each="protocol : ${treatmentProtocols}">
+        <td th:text="${protocol.id}"></td>
+        <td th:text="${protocol.name}"></td>
+        <td th:text="${protocol.disease.name}"></td>
+        <td>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Amount</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="tpas : ${protocol.treatmentProtocolActiveSubstances}">
+                    <td th:text="${tpas.activeSubstance.name}"></td>
+                    <td th:text="${tpas.recommendedAmount}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </td>
+        <td th:text="${protocol.procedures}"></td>
+        <td>
+            <a th:href="@{/treatment-protocol/update/{id}(id=${protocol.id})}">
+                <button>Update</button>
+            </a>
+        </td>
+        <td>
+            <form action="/treatment-protocol/delete" method="post">
+                <input type="hidden" name="id" th:value="${protocol.id}">
+                <input type="submit" value="Delete" onclick="return confirm('Are you sure you want to delete this item?');">
+            </form>
+        </td>
+
+    </tr>
+    </tbody>
+</table>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+</body>
+</html>
