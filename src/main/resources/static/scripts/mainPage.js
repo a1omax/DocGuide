@@ -107,8 +107,7 @@ function addOptionSelectElement(selectElement, optionText, optionValue) {
     option.text = optionText;
     option.value = optionValue;
 
-
-    selectElement.add(option); // todo
+    selectElement.add(option);
 
     // Refresh the Bootstrap Selectpicker to reflect the changes
     $('#' + selectElement.id).selectpicker('refresh');

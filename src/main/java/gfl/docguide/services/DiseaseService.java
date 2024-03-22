@@ -3,6 +3,7 @@ package gfl.docguide.services;
 import com.google.gson.Gson;
 import gfl.docguide.data.Disease;
 import gfl.docguide.data.Symptom;
+import gfl.docguide.exceptions.DataNotFoundException;
 import gfl.docguide.repositories.DiseaseRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,14 +16,13 @@ import java.util.*;
 public class DiseaseService {
     private final DiseaseRepository diseaseRepository;
     private final SymptomService symptomService;
-    private final Gson gson = new Gson();
 
     public List<Disease> getAllDiseases() {
         return diseaseRepository.findAll();
     }
 
-    public Optional<Disease> getDiseaseById(Long diseaseId) {
-        return diseaseRepository.findById(diseaseId);
+    public Disease getDiseaseById(Long diseaseId) {
+        return diseaseRepository.findById(diseaseId).orElseThrow(()-> new DataNotFoundException("Disease was not found by id " + diseaseId));
     }
 
     private Disease createDiseaseWithoutSymptoms(MultiValueMap<String, String> params){
@@ -64,11 +64,11 @@ public class DiseaseService {
         }
 
         Long id = Long.valueOf(stringIdFromParams);
-        Optional<Disease> d = getDiseaseById(id);
+        /*Optional<Disease> d = getDiseaseById(id);
         if (d.isEmpty()){
             return false;
-        }
-        Disease disease = d.get();
+        }*/
+        Disease disease = getDiseaseById(id);
         addSymptomsToDiseaseFromParams(disease, params);
         saveDisease(disease);
 

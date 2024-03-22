@@ -13,4 +13,5 @@ public interface SymptomRepository extends JpaRepository<Symptom, Long> {
     Optional<Symptom> getByNameIgnoreCase(String name);
 
 
+    boolean existsByNameIgnoreCase(String name);
 }

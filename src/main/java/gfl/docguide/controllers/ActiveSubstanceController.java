@@ -49,11 +49,9 @@ public class ActiveSubstanceController {
 
     @GetMapping("/update/{id}")
     public String showUpdateActiveSubstanceForm(@PathVariable("id") Long id, Model model) {
-        Optional<ActiveSubstance> as = activeSubstanceService.getActiveSubstanceById(id);
-        if (as.isEmpty()) {
-            return "redirect:list";
-        }
-        ActiveSubstance activeSubstance = as.get();
+
+
+        ActiveSubstance activeSubstance = activeSubstanceService.getActiveSubstanceById(id);
         model.addAttribute("activeSubstance", activeSubstance);
         // to check if exists
         model.addAttribute("activeSubstanceList", activeSubstanceService.getAllActiveSubstances());

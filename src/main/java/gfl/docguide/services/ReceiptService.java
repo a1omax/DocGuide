@@ -19,7 +19,7 @@ public class ReceiptService {
     DrugService drugService;
 
     public Receipt createReceipt(ReceiptRequest request) {
-        Disease disease = diseaseService.getDiseaseById(request.getDiseaseId()).orElseThrow();
+        Disease disease = diseaseService.getDiseaseById(request.getDiseaseId());
 
         List<DrugIdAmount> drugIdAmountList = request.getDrugIdAmountList();
 
@@ -31,7 +31,7 @@ public class ReceiptService {
             if (!drugService.checkAmount(drugId, amount)) {
                 throw new RuntimeException("Not enough amount for specified drug id");
             }
-            drugAmountMap.put(drugService.getDrugById(drugId).orElseThrow(), amount);
+            drugAmountMap.put(drugService.getDrugById(drugId), amount);
         }
 
         // If no exceptions:

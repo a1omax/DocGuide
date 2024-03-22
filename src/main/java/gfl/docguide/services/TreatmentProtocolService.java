@@ -4,6 +4,7 @@ package gfl.docguide.services;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import gfl.docguide.data.*;
+import gfl.docguide.exceptions.DataNotFoundException;
 import gfl.docguide.repositories.TreatmentProtocolActiveSubstanceRepository;
 import gfl.docguide.repositories.TreatmentProtocolRepository;
 import lombok.AllArgsConstructor;
@@ -32,7 +33,7 @@ public class TreatmentProtocolService {
     }
 
     public TreatmentProtocol getTreatmentProtocolById(Long id){
-        return treatmentProtocolRepository.findById(id).orElseThrow();
+        return treatmentProtocolRepository.findById(id).orElseThrow(()->new DataNotFoundException("Treatment protocol was not found by id " + id));
     }
 
 
@@ -47,7 +48,7 @@ public class TreatmentProtocolService {
         Long diseaseId = Long.valueOf(params.get("disease").getFirst());
         String procedures = params.get("procedures").getFirst();
 
-        Disease disease = diseaseService.getDiseaseById(diseaseId).orElseThrow();
+        Disease disease = diseaseService.getDiseaseById(diseaseId);
 
         return new TreatmentProtocol(name, disease, procedures);
     }
@@ -79,7 +80,6 @@ public class TreatmentProtocolService {
     public TreatmentProtocol updateTreatmentProtocolFromParams(MultiValueMap<String, String> params) {
         Long id = null;
         if(params.containsKey("id")){
-            // todo exception
             id = Long.valueOf(Objects.requireNonNull(params.getFirst("id")));
         }
         if (!treatmentProtocolExistsById(id)){
@@ -112,7 +112,6 @@ public class TreatmentProtocolService {
             return;
         }
 
-
         Type type = new TypeToken<Map<String, String>>(){}.getType();
         for(String jsonASA: activeSubstanceAmountsJsonStringList){
 
@@ -123,26 +122,9 @@ public class TreatmentProtocolService {
         }
     }
 
-
     public List<TreatmentProtocol> getAllTreatmentProtocolsByDiseaseId(Long id){
         return treatmentProtocolRepository.findAllByDisease_Id(id);
     }
-
-/*
-    public TreatmentProtocolDto convertToDTO(TreatmentProtocol treatmentProtocol){
-        TreatmentProtocolDto treatmentProtocolDto = new TreatmentProtocolDto();
-
-        treatmentProtocolDto.setId(treatmentProtocol.getId());
-        treatmentProtocolDto.setName(treatmentProtocol.getName());
-        treatmentProtocolDto.setProcedures(treatmentProtocol.getProcedures());
-        treatmentProtocolDto.setTreatmentProtocolActiveSubstances(
-                treatmentProtocol.getTreatmentProtocolActiveSubstances().stream().map()
-        );
-
-        return null;
-    }
-*/
-
 
 
 }

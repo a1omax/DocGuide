@@ -1,6 +1,7 @@
 package gfl.docguide.controllers;
 
 
+import gfl.docguide.exceptions.DataNotFoundException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,12 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
 
 
         return handleExceptionInternal(runtimeException, message, HttpHeaders.EMPTY, HttpStatus.FORBIDDEN, webRequest);
+    }
+
+    @ExceptionHandler({DataNotFoundException.class})
+    protected ResponseEntity<Object> handleDataNotFoundException(RuntimeException runtimeException, WebRequest webRequest){
+
+        return handleExceptionInternal(runtimeException, runtimeException.getMessage(), HttpHeaders.EMPTY, HttpStatus.NOT_FOUND, webRequest);
     }
 
 }

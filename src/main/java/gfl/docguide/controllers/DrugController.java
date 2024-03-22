@@ -1,6 +1,8 @@
 package gfl.docguide.controllers;
 
+import gfl.docguide.data.ActiveSubstance;
 import gfl.docguide.data.Drug;
+import gfl.docguide.services.ActiveSubstanceService;
 import gfl.docguide.services.DrugService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -17,10 +19,10 @@ import java.util.Optional;
 public class DrugController {
 
     final DrugService drugService;
-
+    final ActiveSubstanceService activeSubstanceService;
 
     @GetMapping("/list")
-    String drugList(Model model){
+    String drugList(Model model) {
         model.addAttribute("drugs", drugService.getAllDrugs());
 
         return "drug/drugList";
@@ -29,20 +31,20 @@ public class DrugController {
     @PostMapping("/create")
     String createDrug(@RequestParam String name,
                       @RequestParam String activeSubstanceName,
-                      @RequestParam int amount){
+                      @RequestParam int amount) {
 
         drugService.saveDrug(name, activeSubstanceName, amount);
         return "redirect:list";
     }
 
     @GetMapping("/create")
-    String createDrugForm(Model model){
-        model.addAttribute("activeSubstances", drugService.getAllActiveSubstances());
+    String createDrugForm(Model model) {
+        model.addAttribute("activeSubstances", activeSubstanceService.getAllActiveSubstances());
         return "drug/createDrug";
     }
 
     @PostMapping("/delete")
-    String deleteDrugById(@RequestParam Long id){
+    String deleteDrugById(@RequestParam Long id) {
         drugService.deleteDrugById(id);
         return "redirect:list";
     }
@@ -50,13 +52,10 @@ public class DrugController {
 
     @GetMapping("/update/{id}")
     public String showUpdateForm(@PathVariable("id") Long id, Model model) {
-        Optional<Drug> d = drugService.getDrugById(id);
-        if (d.isEmpty()){
-            return "redirect:list";
-        }
-        Drug drug = d.get();
+        Drug drug = drugService.getDrugById(id);
+
         model.addAttribute("drug", drug);
-        model.addAttribute("activeSubstances", drugService.getAllActiveSubstances());
+        model.addAttribute("activeSubstances", activeSubstanceService.getAllActiveSubstances());
         return "drug/updateDrug";
     }
 
@@ -70,7 +69,7 @@ public class DrugController {
 
     @PostMapping("/find")
     @ResponseBody
-    public List<Drug> findDrug(@RequestBody Map<String, Long> json){
+    public List<Drug> findDrug(@RequestBody Map<String, Long> json) {
         Long activeSubstanceId = json.get("activeSubstanceId");
 
         return drugService.getAllDrugsByActiveSubstanceId(activeSubstanceId);
@@ -79,12 +78,12 @@ public class DrugController {
 
     @PostMapping("/check-amount")
     @ResponseBody
-    public Boolean checkDrugAmount(@RequestBody Map<String, Long> json){
+    public Boolean checkDrugAmount(@RequestBody Map<String, Long> json) {
         try {
             Long drugId = json.get("drugId");
             Long amount = json.get("amount");
             return drugService.checkAmount(drugId, Math.toIntExact(amount));
-        } catch (ClassCastException | NullPointerException e){
+        } catch (ClassCastException | NullPointerException e) {
             return false;
         }
     }

@@ -6,6 +6,7 @@ import gfl.docguide.data.Disease;
 import gfl.docguide.data.TreatmentProtocol;
 import gfl.docguide.data.dto.TreatmentProtocolDto;
 import gfl.docguide.mappers.TreatmentProtocolMapper;
+import gfl.docguide.services.ActiveSubstanceService;
 import gfl.docguide.services.DiseaseService;
 import gfl.docguide.services.DrugService;
 import gfl.docguide.services.TreatmentProtocolService;
@@ -24,10 +25,11 @@ import java.util.stream.Collectors;
 @Controller
 @RequestMapping("/treatment-protocol")
 public class TreatmentProtocolController {
-    private final TreatmentProtocolService treatmentProtocolService;
-    private final DrugService drugService;
-    private final DiseaseService diseaseService;
-    private final TreatmentProtocolMapper treatmentProtocolMapper;
+    final TreatmentProtocolService treatmentProtocolService;
+    final DrugService drugService;
+    final DiseaseService diseaseService;
+    final TreatmentProtocolMapper treatmentProtocolMapper;
+    final ActiveSubstanceService activeSubstanceService;
 
 
     @GetMapping("/list")
@@ -40,7 +42,7 @@ public class TreatmentProtocolController {
     @GetMapping("/create")
     public String showCreateTreatmentProtocolForm(Model model) {
         List<Disease> diseases = diseaseService.getAllDiseases();
-        List<ActiveSubstance> activeSubstances = drugService.getAllActiveSubstances();
+        List<ActiveSubstance> activeSubstances = activeSubstanceService.getAllActiveSubstances();
         model.addAttribute("diseases", diseases);
         model.addAttribute("activeSubstances", activeSubstances);
         return "treatmentProtocol/createProtocol";
@@ -66,7 +68,7 @@ public class TreatmentProtocolController {
     @GetMapping("/update/{id}")
     public String showUpdateTreatmentProtocolForm(@PathVariable Long id, Model model){
         List<Disease> diseases = diseaseService.getAllDiseases();
-        List<ActiveSubstance> activeSubstances = drugService.getAllActiveSubstances();
+        List<ActiveSubstance> activeSubstances = activeSubstanceService.getAllActiveSubstances();
         model.addAttribute("protocol", treatmentProtocolService.getTreatmentProtocolById(id));
         model.addAttribute("diseases", diseases);
         model.addAttribute("activeSubstances", activeSubstances);

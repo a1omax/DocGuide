@@ -2,6 +2,7 @@ package gfl.docguide.services;
 
 
 import gfl.docguide.data.Symptom;
+import gfl.docguide.exceptions.DataNotFoundException;
 import gfl.docguide.repositories.SymptomRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -11,8 +12,8 @@ import java.util.Optional;
 @AllArgsConstructor
 @Service
 public class SymptomService {
-    SymptomRepository symptomRepository;
 
+    SymptomRepository symptomRepository;
 
     public List<Symptom> getAllSymptoms(){
         return symptomRepository.findAll();
@@ -22,11 +23,19 @@ public class SymptomService {
         return symptomRepository.save(symptom);
     }
 
+    public Symptom getSymptomByName(String name){
+        return symptomRepository.getByNameIgnoreCase(name).orElseThrow(()-> new DataNotFoundException("Symptom was not found by name " + name));
+    }
+
+    public boolean symptomExistByName(String name){
+        return symptomRepository.existsByNameIgnoreCase(name);
+    }
     public Symptom getOrSaveSymptom(String symptomName){
-        Optional<Symptom> s = symptomRepository.getByNameIgnoreCase(symptomName); // todo error? duplicate maybe?
-        Symptom symptom;
-        symptom = s.orElseGet(() -> saveSymptom(new Symptom(symptomName)));
-        return symptom;
+        if (symptomExistByName(symptomName)){
+            return getSymptomByName(symptomName);
+        }
+
+        return saveSymptom(new Symptom(symptomName));
     }
 
     public List<Symptom> getAllSymptomsById(List<Long> symptomIds){

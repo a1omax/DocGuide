@@ -42,7 +42,7 @@ public class DiseaseController {
     @GetMapping("/update/{id}")
     String showDiseaseUpdateFrom(@PathVariable Long id, Model model){
         model.addAttribute("symptomList", symptomService.getAllSymptoms());
-        model.addAttribute("disease", diseaseService.getDiseaseById(id).get());
+        model.addAttribute("disease", diseaseService.getDiseaseById(id));
         return "disease/updateDisease";
     }
 
