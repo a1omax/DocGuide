@@ -7,7 +7,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
+
 
 @AllArgsConstructor
 @Service
@@ -19,7 +19,7 @@ public class ActiveSubstanceService {
         return activeSubstanceRepository.save(activeSubstance);
     }
     public ActiveSubstance saveActiveSubstance(String name){
-        return activeSubstanceRepository.save(new ActiveSubstance(name));
+        return saveActiveSubstance(new ActiveSubstance(name));
     }
     public List<ActiveSubstance> getAllActiveSubstances(){
         return activeSubstanceRepository.findAll();
@@ -45,7 +45,7 @@ public class ActiveSubstanceService {
         }
         ActiveSubstance activeSubstance = getActiveSubstanceById(id);
         activeSubstance.setName(activeSubstanceName);
-        activeSubstanceRepository.save(activeSubstance);
+        saveActiveSubstance(activeSubstance);
         return true;
     }
 

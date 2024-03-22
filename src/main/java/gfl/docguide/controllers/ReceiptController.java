@@ -1,8 +1,6 @@
 package gfl.docguide.controllers;
 
 
-import gfl.docguide.components.Receipt;
-import gfl.docguide.data.dto.request.ReceiptRequest;
 import gfl.docguide.services.ReceiptService;
 import gfl.docguide.services.SymptomService;
 import lombok.AllArgsConstructor;
@@ -29,13 +27,7 @@ public class ReceiptController {
         model.addAttribute("symptomList", symptomService.getAllSymptoms());
         return "mainPage";
     }
-    @ResponseBody
-    @PostMapping("/receipt/submit-data")
-    String submitReceipt(@RequestBody ReceiptRequest request){
-        Receipt receipt = receiptService.createReceipt(request);
 
-        return receipt.toTextReceipt();
-    }
 
 
 }

@@ -3,13 +3,11 @@ package gfl.docguide.services;
 import gfl.docguide.data.ActiveSubstance;
 import gfl.docguide.data.Drug;
 import gfl.docguide.exceptions.DataNotFoundException;
-import gfl.docguide.repositories.ActiveSubstanceRepository;
 import gfl.docguide.repositories.DrugRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 
 @Service
@@ -20,8 +18,8 @@ public class DrugService {
 
 
 
-    public void saveDrug(Drug drug) {
-        drugRepository.save(drug);
+    public Drug saveDrug(Drug drug) {
+        return drugRepository.save(drug);
     }
 
     public Drug saveDrug(String name, String activeSubstanceName, int amount) {
@@ -32,7 +30,7 @@ public class DrugService {
             activeSubstance = activeSubstanceService.saveActiveSubstance(activeSubstanceName);
         }
 
-        return drugRepository.save(new Drug(name, activeSubstance, amount));
+        return saveDrug(new Drug(name, activeSubstance, amount));
     }
 
 

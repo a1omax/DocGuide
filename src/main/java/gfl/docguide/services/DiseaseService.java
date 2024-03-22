@@ -1,6 +1,5 @@
 package gfl.docguide.services;
 
-import com.google.gson.Gson;
 import gfl.docguide.data.Disease;
 import gfl.docguide.data.Symptom;
 import gfl.docguide.exceptions.DataNotFoundException;
@@ -64,10 +63,7 @@ public class DiseaseService {
         }
 
         Long id = Long.valueOf(stringIdFromParams);
-        /*Optional<Disease> d = getDiseaseById(id);
-        if (d.isEmpty()){
-            return false;
-        }*/
+
         Disease disease = getDiseaseById(id);
         addSymptomsToDiseaseFromParams(disease, params);
         saveDisease(disease);

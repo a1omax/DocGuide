@@ -6,7 +6,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
 
 
 @Controller
@@ -53,7 +52,6 @@ public class ActiveSubstanceController {
 
         ActiveSubstance activeSubstance = activeSubstanceService.getActiveSubstanceById(id);
         model.addAttribute("activeSubstance", activeSubstance);
-        // to check if exists
         model.addAttribute("activeSubstanceList", activeSubstanceService.getAllActiveSubstances());
         return "activeSubstance/updateSubstance";
     }

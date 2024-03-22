@@ -17,7 +17,7 @@ function getSelectedOptions(elementId) {
 async function findDisease() {
     let symptomList = getSelectedOptions("symptomsSelect");
     try {
-        const response = await fetch("/disease/find", {
+        const response = await fetch("/api/v1/disease/find", {
             method: "POST",
             body: JSON.stringify({
                 symptomList,
@@ -117,7 +117,7 @@ function addOptionSelectElement(selectElement, optionText, optionValue) {
 async function findProtocol() {
     let selectedOption = getSelectedOption("diseaseSelect");
     try {
-        const response = await fetch("/treatment-protocol/find", {
+        const response = await fetch("/api/v1/treatment-protocol/find", {
             method: "POST",
             body: JSON.stringify({
                 diseaseId: selectedOption.value,
@@ -200,7 +200,7 @@ async function createDrugSelectionBlock(elementToAddTo, tpas) {
 
 async function findDrugs(activeSubstanceId) {
     try {
-        const response = await fetch("/drug/find", {
+        const response = await fetch("/api/v1/drug/find", {
             method: "POST",
             body: JSON.stringify({
                 activeSubstanceId: activeSubstanceId,
@@ -223,7 +223,7 @@ async function findDrugs(activeSubstanceId) {
 
 async function checkStorage(drugId, amount) {
     try {
-        const response = await fetch("/drug/check-amount", {
+        const response = await fetch("/api/v1/drug/check-amount", {
             method: "POST",
             body: JSON.stringify({
                 drugId: drugId,
@@ -270,7 +270,7 @@ async function onClickSubmitData() {
 
 
     try {
-        const response = await fetch("/receipt/submit-data", {
+        const response = await fetch("/api/v1/receipt/submit-data", {
             method: "POST",
             body: JSON.stringify(
                 {
@@ -299,24 +299,17 @@ async function onClickSubmitData() {
     }
 }
 
-// Function to initiate file download
 function downloadFile(data) {
-    // Create a Blob object from the data
-    const blob = new Blob([data], { type: 'text/plain' }); // Adjust the type as per your file type
+    const blob = new Blob([data], {type: 'text/plain'});
 
-    // Create a link element
     const link = document.createElement('a');
 
-    // Set the href attribute with the Blob object
     link.href = window.URL.createObjectURL(blob);
 
-    // Set the download attribute with desired file name
     link.download = 'receipt.txt';
 
-    // Append the link to the body
     document.body.appendChild(link);
 
-    // Programmatically click the link to trigger the download
     link.click();
 
     // Cleanup

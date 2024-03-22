@@ -1,4 +1,4 @@
-package gfl.docguide.controllers;
+package gfl.docguide.controllers.exception;
 
 
 import gfl.docguide.exceptions.DataNotFoundException;
@@ -16,8 +16,8 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({DataIntegrityViolationException.class})
     protected ResponseEntity<Object> handleChildDeletion(RuntimeException runtimeException, WebRequest webRequest){
-        //String message =  runtimeException.getMessage();
-        String message = "Deletion request was blocked: Delete children of this entity first";
+
+        String message = "Request was blocked: constraint violated, change another entity first";
 
 
         return handleExceptionInternal(runtimeException, message, HttpHeaders.EMPTY, HttpStatus.FORBIDDEN, webRequest);

@@ -4,7 +4,6 @@ package gfl.docguide.controllers;
 import gfl.docguide.data.ActiveSubstance;
 import gfl.docguide.data.Disease;
 import gfl.docguide.data.TreatmentProtocol;
-import gfl.docguide.data.dto.TreatmentProtocolDto;
 import gfl.docguide.mappers.TreatmentProtocolMapper;
 import gfl.docguide.services.ActiveSubstanceService;
 import gfl.docguide.services.DiseaseService;
@@ -17,8 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.util.MultiValueMap;
 
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 
 @AllArgsConstructor
@@ -81,15 +78,6 @@ public class TreatmentProtocolController {
         treatmentProtocolService.updateTreatmentProtocolFromParams(params);
 
         return "redirect:list";
-    }
-
-    @ResponseBody
-    @PostMapping("/find")
-    public List<TreatmentProtocolDto> findByDiseaseId(@RequestBody Map<String, Long> json){
-        return treatmentProtocolService.getAllTreatmentProtocolsByDiseaseId(json.get("diseaseId"))
-                .stream()
-                .map(treatmentProtocolMapper::toDto)
-                .collect(Collectors.toList());
     }
 
 

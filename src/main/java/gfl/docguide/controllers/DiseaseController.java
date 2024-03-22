@@ -1,6 +1,5 @@
 package gfl.docguide.controllers;
 
-import gfl.docguide.data.Disease;
 import gfl.docguide.services.DiseaseService;
 import gfl.docguide.services.SymptomService;
 import lombok.AllArgsConstructor;
@@ -8,9 +7,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Map;
 
 
 @AllArgsConstructor
@@ -59,14 +55,6 @@ public class DiseaseController {
     }
 
 
-    @PostMapping("/find")
-    @ResponseBody
-    public List<Disease> findDiseasesBySymptoms(@RequestBody Map<String, List<Long>> listMap){
 
-        List<Long> symptomIds = listMap.get("symptomList");
-
-        return diseaseService.findDiseasesBySymptomIds(symptomIds);
-
-    }
 
 }

@@ -1,6 +1,5 @@
 package gfl.docguide.controllers;
 
-import gfl.docguide.data.ActiveSubstance;
 import gfl.docguide.data.Drug;
 import gfl.docguide.services.ActiveSubstanceService;
 import gfl.docguide.services.DrugService;
@@ -9,9 +8,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 @AllArgsConstructor
 @Controller
@@ -67,26 +63,7 @@ public class DrugController {
         return "redirect:list"; // Redirect to the drug list page
     }
 
-    @PostMapping("/find")
-    @ResponseBody
-    public List<Drug> findDrug(@RequestBody Map<String, Long> json) {
-        Long activeSubstanceId = json.get("activeSubstanceId");
 
-        return drugService.getAllDrugsByActiveSubstanceId(activeSubstanceId);
-
-    }
-
-    @PostMapping("/check-amount")
-    @ResponseBody
-    public Boolean checkDrugAmount(@RequestBody Map<String, Long> json) {
-        try {
-            Long drugId = json.get("drugId");
-            Long amount = json.get("amount");
-            return drugService.checkAmount(drugId, Math.toIntExact(amount));
-        } catch (ClassCastException | NullPointerException e) {
-            return false;
-        }
-    }
 
 
 }
