@@ -14,7 +14,9 @@ import org.springframework.util.MultiValueMap;
 import java.lang.reflect.Type;
 import java.util.*;
 
-
+/**
+ * Service class to handle operations related to treatment protocols.
+ */
 @AllArgsConstructor
 @Service
 public class TreatmentProtocolService {
@@ -27,20 +29,38 @@ public class TreatmentProtocolService {
 
     private final TreatmentProtocolActiveSubstanceRepository treatmentProtocolActiveSubstanceRepository;
 
-
+    /**
+     * Retrieves all treatment protocols.
+     * @return A list of all treatment protocols.
+     */
     public List<TreatmentProtocol> getAllTreatmentProtocols() {
         return treatmentProtocolRepository.findAll();
     }
 
+    /**
+     * Retrieves a treatment protocol by its ID.
+     * @param id The ID of the treatment protocol to retrieve.
+     * @return The TreatmentProtocol entity with the specified ID.
+     * @throws DataNotFoundException If no treatment protocol is found with the provided ID.
+     */
     public TreatmentProtocol getTreatmentProtocolById(Long id){
-        return treatmentProtocolRepository.findById(id).orElseThrow(()->new DataNotFoundException("Treatment protocol was not found by id " + id));
+        return treatmentProtocolRepository.findById(id)
+                .orElseThrow(()->new DataNotFoundException("Treatment protocol was not found by id " + id));
     }
 
-
+    /**
+     * Saves the provided TreatmentProtocol entity.
+     * @param treatmentProtocol The TreatmentProtocol entity to be saved.
+     * @return The saved TreatmentProtocol entity.
+     */
     public TreatmentProtocol saveTreatmentProtocol(TreatmentProtocol treatmentProtocol){
         return treatmentProtocolRepository.save(treatmentProtocol);
     }
-
+    /**
+     * Creates a new TreatmentProtocol entity from the provided parameters without active substance amounts.
+     * @param params The parameters for creating the treatment protocol.
+     * @return The newly created TreatmentProtocol entity.
+     */
     private TreatmentProtocol createNewTreatmentProtocolFromParamsWithoutActiveSubstanceAmounts(MultiValueMap<String, String> params){
 
 
@@ -53,7 +73,13 @@ public class TreatmentProtocolService {
         return new TreatmentProtocol(name, disease, procedures);
     }
 
-
+    /**
+     * Adds an active substance with its recommended amount to the specified treatment protocol.
+     * @param treatmentProtocol The treatment protocol to add the active substance to.
+     * @param activeSubstanceName The name of the active substance.
+     * @param activeSubstanceRecommendedAmount The recommended amount of the active substance.
+     * @return The added TreatmentProtocolActiveSubstance entity.
+     */
     public TreatmentProtocolActiveSubstance addActiveSubstanceAmount(TreatmentProtocol treatmentProtocol,
                                          String activeSubstanceName,
                                          String activeSubstanceRecommendedAmount){
@@ -69,21 +95,36 @@ public class TreatmentProtocolService {
         return treatmentProtocolActiveSubstanceRepository.save(tpas);
     }
 
+    /**
+     * Deletes a treatment protocol with the specified ID.
+     * @param id The ID of the treatment protocol to be deleted.
+     */
     public void deleteTreatmentProtocolById(Long id) {
         treatmentProtocolRepository.deleteById(id);
     }
 
+    /**
+     * Checks if a treatment protocol exists with the specified ID.
+     * @param id The ID of the treatment protocol to check.
+     * @return True if a treatment protocol with the specified ID exists, false otherwise.
+     */
     public boolean treatmentProtocolExistsById(Long id){
         return treatmentProtocolRepository.existsById(id);
     }
 
+    /**
+     * Updates a treatment protocol from the provided parameters.
+     * @param params The parameters for updating the treatment protocol.
+     * @return The updated TreatmentProtocol entity.
+     * @throws DataNotFoundException If TreatmentProtocol was not found by id in params
+     */
     public TreatmentProtocol updateTreatmentProtocolFromParams(MultiValueMap<String, String> params) {
         Long id = null;
         if(params.containsKey("id")){
             id = Long.valueOf(Objects.requireNonNull(params.getFirst("id")));
         }
         if (!treatmentProtocolExistsById(id)){
-            return null;
+            throw new DataNotFoundException("Treatment protocol was not found by id");
         }
 
         TreatmentProtocol treatmentProtocol = createNewTreatmentProtocolFromParamsWithoutActiveSubstanceAmounts(params);
@@ -96,14 +137,22 @@ public class TreatmentProtocolService {
         return treatmentProtocol;
     }
 
-
+    /**
+     * Saves a treatment protocol from the provided parameters.
+     * @param params The parameters for creating the treatment protocol.
+     * @return The saved TreatmentProtocol entity.
+     */
     public TreatmentProtocol saveTreatmentProtocolFromParams(MultiValueMap<String, String> params){
         TreatmentProtocol treatmentProtocol = saveTreatmentProtocol(createNewTreatmentProtocolFromParamsWithoutActiveSubstanceAmounts(params));
         addActiveSubstanceAmountsToTreatmentProtocol(params, treatmentProtocol);
         return treatmentProtocol;
     }
 
-
+    /**
+     * Adds all active substance amounts to the specified treatment protocol.
+     * @param params The parameters containing active substance amounts.
+     * @param treatmentProtocol The treatment protocol to add active substance amounts to.
+     */
     public void addActiveSubstanceAmountsToTreatmentProtocol(MultiValueMap<String, String> params,
                                                               TreatmentProtocol treatmentProtocol){
 
@@ -122,6 +171,11 @@ public class TreatmentProtocolService {
         }
     }
 
+    /**
+     * Retrieves all treatment protocols associated with a specific disease ID.
+     * @param id The ID of the disease.
+     * @return A list of TreatmentProtocol entities associated with the specified disease ID.
+     */
     public List<TreatmentProtocol> getAllTreatmentProtocolsByDiseaseId(Long id){
         return treatmentProtocolRepository.findAllByDisease_Id(id);
     }

@@ -14,11 +14,8 @@ public class ActiveSubstance {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
 
-
     @Column(nullable = false, unique = true)
     String name;
-
-
     public ActiveSubstance(String name){
         this.name = name;
     }
